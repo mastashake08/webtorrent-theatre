@@ -38,9 +38,9 @@ export default class TorrentManager {
   }
 
   async streamTorrent(tor) {
-    const magUrl = `magnet:?xt=urn:btih:${tor.torrents[0].hash}&dn=${encodeURIComponent(tor.title)}&tr=udp%3A%2F%2Fexplodie.org%3A6969&tr=udp%3A%2F%2Ftracker.coppersurfer.tk%3A6969&tr=udp%3A%2F%2Ftracker.empire-js.us%3A1337&tr=udp%3A%2F%2Ftracker.leechers-paradise.org%3A6969&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337&tr=wss%3A%2F%2Ftracker.btorrent.xyz&tr=wss%3A%2F%2Ftracker.openwebtorrent.com&ws=https%3A%2F%2Fwebtorrent.io%2Ftorrents%2F`
+    const magUrl = `magnet:?xt=urn:btih:${tor.torrents[0].hash}&dn=${encodeURIComponent(tor.title)}&tr=wss://tracker.btorrent.xyz&tr=wss://tracker.openwebtorrent.com`
     console.log(magUrl)
-    this.client.add(tor.torrents[0].url, function (torrent) {
+    this.client.add(magUrl, function (torrent) {
       console.log(torrent)
       // Torrents can contain many files. Let's use the .mp4 file
       torrent.on('download', function (bytes) {
@@ -56,7 +56,7 @@ export default class TorrentManager {
 
       // Display the file by adding it to the DOM.
       // Supports video, audio, image files, and more!
-      file.appendTo('body')
+      file.appendTo('div#movie')
     })
   }
 }

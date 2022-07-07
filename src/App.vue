@@ -1,7 +1,7 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <img alt="Web Torrent Logo" src="./assets/logo-black.svg" id="logo">
+    <HelloWorld msg="Welcome to WebTorrent Theatre"/>
   </div>
 </template>
 
@@ -24,5 +24,10 @@ export default {
   text-align: center;
   color: #2c3e50;
   margin-top: 60px;
+}
+
+#logo {
+  width: 250px;
+  height: 250px;
 }
 </style>
