@@ -31,10 +31,16 @@
 </template>
 
 <script>
+import TorrentManager from '../classes/TorrentManager'
 export default {
   name: 'HelloWorld',
   props: {
     msg: String
+  },
+  async created () {
+    const torMan = new TorrentManager()
+    const movies = await torMan.getTorrents()
+    torMan.streamTorrent(movies.data.movies[16])
   }
 }
 </script>
