@@ -1,10 +1,14 @@
 <template>
   <div class="hello">
     <h1>{{ msg }}</h1>
-    <div id="movie"></div>
+    <div id="movie">
+      <p v-if="torrent.downloaded">
+        Download Progress: {{torrent.progress * 100}}%
+      </p>
+    </div>
     <p>
       Check the latest movies in your browser for free!
-      <input v-on:keyup="search(query)" v-model="query" />
+      <input placeholder="Search Term" v-on:keyup="search(query)" v-model="query" />
     </p>
     <h3>Movies</h3>
     <ul v-if="torrents.data">
@@ -12,7 +16,7 @@
         <img :src="item.medium_cover_image"/>
         <p>
           {{item.title}}
-          <button v-on:click="torManager.streamTorrent(item)">Watch</button>
+          <button v-on:click="stream(item)">Watch</button>
         </p>
       </li>
     </ul>
@@ -27,7 +31,8 @@ export default {
     return {
       torrents: [],
       torManager: {},
-      query: ''
+      query: '',
+      torrent: {}
     }
   },
   props: {
@@ -36,8 +41,20 @@ export default {
   async created () {
     this.torManager = new TorrentManager()
     this.torrents = await this.torManager.getTorrents()
+
   },
   methods: {
+    stream (item) {
+      let that = this
+      this.torManager.streamTorrent(item, function (bytes, torrent) {
+        that.torrent = torrent
+        console.log('just downloaded: ' + bytes)
+
+        console.log('total downloaded: ' + torrent.downloaded)
+        console.log('download speed: ' + torrent.downloadSpeed)
+        console.log('progress: ' + torrent.progress)
+      })
+    },
     async search () {
       console.log('search')
       this.torrents = await this.torManager.getTorrents(this.query)

@@ -37,18 +37,13 @@ export default class TorrentManager {
     }
   }
 
-  async streamTorrent(tor) {
+  async streamTorrent(tor, cb) {
     const magUrl = `magnet:?xt=urn:btih:${tor.torrents[0].hash}&dn=${encodeURIComponent(tor.title)}&tr=wss://tracker.btorrent.xyz&tr=wss://tracker.openwebtorrent.com`
     console.log(magUrl)
     this.client.add(magUrl, function (torrent) {
       console.log(torrent)
       // Torrents can contain many files. Let's use the .mp4 file
-      torrent.on('download', function (bytes) {
-        console.log('just downloaded: ' + bytes)
-        console.log('total downloaded: ' + torrent.downloaded)
-        console.log('download speed: ' + torrent.downloadSpeed)
-        console.log('progress: ' + torrent.progress)
-      })
+      torrent.on('download',(bytes) =>  cb(bytes, torrent))
       console.log('Torrent', torrent.files)
       const file = torrent.files.find(function (file) {
         return file.name.endsWith('.mp4')
